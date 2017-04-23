@@ -7,35 +7,21 @@ function SpriteManager()
 
   function loadSprite(spriteDef) -- private
     if spriteDef == nil then return nil end --Load the sprite definition file to ensure it exists    
-    
-    --Load the sprite definition file to ensure it exists
-    local definitionFile = nil
-    if string.match(love.filesystem.getSource(), ".love") then
-      definitionFile = loadfile(spriteDef)
-    else
-      definitionFile = loadfile(love.filesystem.getRealDirectory(spriteDef) .. "/" ..spriteDef)
-    end
-    
-    --If the file doesn't exist or has syntax errors, it'll be nil.    
-    if definitionFile == nil then
-      print("Attempt to load an invalid file (inexistent or syntax errors?): "..spriteDef)         
-      return nil
-    end 
 
     local oldSprite = spriteBank[spriteDef]     
-    spriteBank[spriteDef] = definitionFile()
+    spriteBank[spriteDef.spriteName] = spriteDef
     
     --Check the version to verify if it is compatible with this one.   
-    if spriteBank[spriteDef].serializationVersion ~= serializationVersion then 
+    if spriteBank[spriteDef.spriteName].serializationVersion ~= serializationVersion then 
       print("Attempt to load file with incompatible versions: "..spriteDef) 
       print("Expected version "..serializationVersion..", got version "..spriteBank[spriteDef].serializationVersion.." .")
-      spriteBank[spriteDef] = oldSprite -- Undo the changes due to error 
+      spriteBank[spriteDef.spriteName] = oldSprite -- Undo the changes due to error 
       -- Return old value (nil if not previously loaded)
-      return spriteBank[spriteDef]
+      return spriteBank[spriteDef.spriteName]
     end 
     
     --Storing the path to the image in a variable (to add readability)
-    local spriteSheet = spriteBank[spriteDef].spriteSheet 
+    local spriteSheet = spriteBank[spriteDef.spriteName].spriteSheet 
 
     --Load the image.    
     local oldImage = imageBank[spriteSheet]     
@@ -46,19 +32,19 @@ function SpriteManager()
       -- Invalid image, reverting all changes        
       imageBank[spriteSheet] = oldImage   
       -- Revert image        
-      spriteBank[spriteDef] = oldSprite    
+      spriteBank[spriteDef.spriteName] = oldSprite    
       -- Revert sprite
       print("Failed loading sprite "..spriteDef..", invalid image path ( "..spriteSheet.." ).")     
     end
     
-    return spriteBank[spriteDef]
+    return spriteBank[spriteDef.spriteName]
   end
 
   this.get = function(spriteDef) 
     if spriteDef == nil then return nil end
     
     -- invalid use
-    if spriteBank[spriteDef] == nil then 
+    if spriteBank[spriteDef.spriteName] == nil then 
       --Sprite not loaded attempting to load; abort on failure.        
       if loadSprite(spriteDef) == nil then 
         return nil 
@@ -67,9 +53,9 @@ function SpriteManager()
     
     --All set, return the default table.    
     return {         
-      sprite = spriteBank[spriteDef], --Sprite reference 
+      sprite = spriteBank[spriteDef.spriteName], --Sprite reference 
       --Sets the animation as the first one in the list.        
-      currentAnim = spriteBank[spriteDef].animationNames[1],
+      currentAnim = spriteBank[spriteDef.spriteName].animationNames[1],
       currentFrame = 1,
       elapsedTime = 0,
       sizeScale = 1,

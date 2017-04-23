@@ -5,6 +5,7 @@ if arg[#arg] == "-debug" then require("mobdebug").start() end
 require "spriteManager" --Including the file
 require "parallaxManager" --Including the file
 require "particles" --Including the file
+require "pandaSprite" --Including the file
 
 local screenWidth
 local screenHeight
@@ -24,8 +25,9 @@ function love.load()
   parallaxManager = ParallaxManager()
   spriteManager = SpriteManager()
   particles = Particles()
-    -- Panda
-  panda = spriteManager.get("pandaSprite.lua")
+  -- Panda
+  pandaData = PandaSprite()
+  panda = spriteManager.get(pandaData)
   groundPosition = screenHeight-30
   -- Parallaxes
   parallaxManager.addParallax("paralax_sky.png", 0)

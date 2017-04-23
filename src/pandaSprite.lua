@@ -1,19 +1,20 @@
-local imageW = 320 
-local imageH = 20
+function PandaSprite()
+  this = {}
+
+  local imageW = 320 
+  local imageH = 20
         
-return {
-  serializationVersion = 1.0,
-  
-  spriteSheet = "images/running-panda.png", 
-  spriteName = "panda", -- The name of the sprite
+  this.serializationVersion = 1.0
+  this.spriteSheet = "images/running-panda.png"
+  this.spriteName = "panda" -- The name of the sprite
 
-  frameDuration = 0.07,
+  this.frameDuration = 0.07
   
-  animationNames = {
+  this.animationNames = {
     "run"
-  },
+  }
 
-  animations = { 
+  this.animations = { 
     run = {
       love.graphics.newQuad( 1, 1, 40, 20, imageW, imageH ),
       love.graphics.newQuad( 41, 1, 40, 20, imageW, imageH ),
@@ -25,5 +26,6 @@ return {
       love.graphics.newQuad( 281, 1, 40, 20, imageW, imageH )
     }
   }
-}
-       
+  
+  return this
+ end        
