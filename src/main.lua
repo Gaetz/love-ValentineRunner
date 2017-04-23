@@ -5,8 +5,8 @@ if arg[#arg] == "-debug" then require("mobdebug").start() end
 require "spriteManager" --Including the file
 require "parallaxManager" --Including the file
 
-local screenw
-local screenh
+local screenWidth
+local screenHeight
 local groundPosition
 local panda
 
@@ -15,10 +15,10 @@ local spriteManager
 
 function love.load()
   
-  love.window.setMode(512*2, 256*2)
+  love.window.setMode(512 * 2, 256 * 2)
   love.window.setTitle("Valentine runner")
-  screenw = love.graphics.getWidth()/2
-  screenh = love.graphics.getHeight()/2
+  screenWidth = love.graphics.getWidth()/2
+  screenHeight = love.graphics.getHeight()/2
   
   parallaxManager = ParallaxManager()
   spriteManager = SpriteManager()
@@ -34,7 +34,7 @@ function love.load()
   
   panda = spriteManager.get("pandaSprite.lua")
 
-  groundPosition = screenh-30
+  groundPosition = screenHeight-30
 end
 
 function love.update(dt)
@@ -48,7 +48,7 @@ function love.draw()
   love.graphics.scale(2,2)
   
   parallaxManager.draw()
-  spriteManager.draw(panda, screenw/4, groundPosition)
+  spriteManager.draw(panda, screenWidth / 4, groundPosition)
   
   love.graphics.pop()
 end
