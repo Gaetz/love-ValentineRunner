@@ -2,13 +2,15 @@ io.stdout:setvbuf('no')
 love.graphics.setDefaultFilter("nearest")
 if arg[#arg] == "-debug" then require("mobdebug").start() end
 
-require "spriteManager" --Including the file
-require "parallaxManager" --Including the file
-require "particles" --Including the file
-require "pandaSprite" --Including the file
+--Including files
+require "spriteManager" 
+require "parallaxManager"
+require "particles"
+require "pandaSprite"
 
 local screenWidth
 local screenHeight
+local panda
 local groundPosition
 
 local parallaxManager
@@ -26,8 +28,7 @@ function love.load()
   spriteManager = SpriteManager()
   particles = Particles()
   -- Panda
-  pandaData = PandaSprite()
-  panda = spriteManager.get(pandaData)
+  panda = spriteManager.get(PandaSprite())
   groundPosition = screenHeight-30
   -- Parallaxes
   parallaxManager.addParallax("paralax_sky.png", 0)
