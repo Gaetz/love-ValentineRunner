@@ -2,8 +2,8 @@ function SpriteManager()
   serializationVersion = 1.0
   this = {}
 
-  this.spriteBank = {} --Map with all the sprite definitions 
-  this.imageBank = {} --Contains all images that were already loaded
+  local spriteBank = {} --Map with all the sprite definitions 
+  local imageBank = {} --Contains all images that were already loaded
 
   function loadSprite(spriteDef) -- private
     if spriteDef == nil then return nil end --Load the sprite definition file to ensure it exists    
@@ -15,43 +15,43 @@ function SpriteManager()
       return nil
     end 
 
-    local oldSprite = this.spriteBank[spriteDef]     
-    this.spriteBank[spriteDef] = definitionFile()
+    local oldSprite = spriteBank[spriteDef]     
+    spriteBank[spriteDef] = definitionFile()
     
     --Check the version to verify if it is compatible with this one.   
-    if this.spriteBank[spriteDef].serializationVersion ~= serializationVersion then 
+    if spriteBank[spriteDef].serializationVersion ~= serializationVersion then 
       print("Attempt to load file with incompatible versions: "..spriteDef) 
-      print("Expected version "..serializationVersion..", got version "..this.spriteBank[spriteDef].serializationVersion.." .")
-      this.spriteBank[spriteDef] = oldSprite -- Undo the changes due to error 
+      print("Expected version "..serializationVersion..", got version "..spriteBank[spriteDef].serializationVersion.." .")
+      spriteBank[spriteDef] = oldSprite -- Undo the changes due to error 
       -- Return old value (nil if not previously loaded)
-      return this.spriteBank[spriteDef]
+      return spriteBank[spriteDef]
     end 
     
     --Storing the path to the image in a variable (to add readability)
-    local spriteSheet = this.spriteBank[spriteDef].spriteSheet 
+    local spriteSheet = spriteBank[spriteDef].spriteSheet 
 
     --Load the image.    
-    local oldImage = this.imageBank[spriteSheet]     
-    this.imageBank[spriteSheet] = love.graphics.newImage(spriteSheet)
+    local oldImage = imageBank[spriteSheet]     
+    imageBank[spriteSheet] = love.graphics.newImage(spriteSheet)
     
     --Check if the loaded image is valid.    
-    if this.imageBank[spriteSheet] == nil then 
+    if imageBank[spriteSheet] == nil then 
       -- Invalid image, reverting all changes        
-      this.imageBank[spriteSheet] = oldImage   
+      imageBank[spriteSheet] = oldImage   
       -- Revert image        
-      this.spriteBank[spriteDef] = oldSprite    
+      spriteBank[spriteDef] = oldSprite    
       -- Revert sprite
       print("Failed loading sprite "..spriteDef..", invalid image path ( "..spriteSheet.." ).")     
     end
     
-    return this.spriteBank[spriteDef]
+    return spriteBank[spriteDef]
   end
 
   this.get = function(spriteDef) 
     if spriteDef == nil then return nil end
     
     -- invalid use
-    if this.spriteBank[spriteDef] == nil then 
+    if spriteBank[spriteDef] == nil then 
       --Sprite not loaded attempting to load; abort on failure.        
       if loadSprite(spriteDef) == nil then 
         return nil 
@@ -60,9 +60,9 @@ function SpriteManager()
     
     --All set, return the default table.    
     return {         
-      sprite = this.spriteBank[spriteDef], --Sprite reference 
+      sprite = spriteBank[spriteDef], --Sprite reference 
       --Sets the animation as the first one in the list.        
-      currentAnim = this.spriteBank[spriteDef].animationNames[1],
+      currentAnim = spriteBank[spriteDef].animationNames[1],
       currentFrame = 1,
       elapsedTime = 0,
       sizeScale = 1,
@@ -94,7 +94,7 @@ function SpriteManager()
   this.draw = function(spr, x, y) 
     if(spr == nil) then return end
     love.graphics.draw(
-      this.imageBank[spr.sprite.spriteSheet],
+      imageBank[spr.sprite.spriteSheet],
       --The image --Current frame of the current animation
       spr.sprite.animations[spr.currentAnim][spr.currentFrame],
       x,

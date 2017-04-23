@@ -2,40 +2,44 @@ io.stdout:setvbuf('no')
 love.graphics.setDefaultFilter("nearest")
 if arg[#arg] == "-debug" then require("mobdebug").start() end
 
-local screenw -- largeur écran
-local screenh -- hauteur écran
+require "spriteManager" --Including the file
+require "parallaxManager" --Including the file
 
--- Fond des zones
-local imgBG1 = love.graphics.newImage("images/forest.png")
--- Position horizontale du fond (pour scrolling)
-local bgX = 1
+local screenw
+local screenh
 local groundPosition
+local panda
 
+local parallaxManager
+local spriteManager
 
 function love.load()
   
-  love.window.setMode(512*2,256*2)
+  love.window.setMode(512*2, 256*2)
   love.window.setTitle("Valentine runner")
   screenw = love.graphics.getWidth()/2
   screenh = love.graphics.getHeight()/2
   
-  
-  require "spriteManager" --Including the file
+  parallaxManager = ParallaxManager()
   spriteManager = SpriteManager()
+
+  parallaxManager.addParallax("paralax_sky.png", 0)
+  parallaxManager.addParallax("paralax_sea-clouds.png", 0.01)
+  parallaxManager.addParallax("paralax_mountains-bg.png", 0.05)
+  parallaxManager.addParallax("paralax_mountains-middle.png", 0.1)
+  parallaxManager.addParallax("paralax_mountains.png", 0.2)
+  parallaxManager.addParallax("paralax_trees.png", 0.8)
+  parallaxManager.addParallax("paralax_behind-grass.png", 1)
+  parallaxManager.addParallax("paralax_grass.png", 1.2)
   
   panda = spriteManager.get("pandaSprite.lua")
-  
+
   groundPosition = screenh-30
 end
 
 function love.update(dt)
+  parallaxManager.update(dt)
   spriteManager.update(panda, dt)
-  
-  -- Scrolling infini du fond
-  bgX = bgX - 120*dt
-  if bgX <= 0-imgBG1:getWidth() then
-    bgX = 1
-  end
 end
 
 function love.draw()
@@ -43,12 +47,7 @@ function love.draw()
   -- double scale
   love.graphics.scale(2,2)
   
-  love.graphics.draw(imgBG1,bgX,1)
-  -- Si il y a du noir à droite, on dessine un 2ème fond
-  if bgX < 1 then
-    love.graphics.draw(imgBG1,bgX + imgBG1:getWidth(),1)
-  end
-  
+  parallaxManager.draw()
   spriteManager.draw(panda, screenw/4, groundPosition)
   
   love.graphics.pop()
