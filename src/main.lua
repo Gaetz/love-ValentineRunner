@@ -9,7 +9,6 @@ require "particles" --Including the file
 local screenWidth
 local screenHeight
 local groundPosition
-local panda
 
 local parallaxManager
 local spriteManager
@@ -18,13 +17,16 @@ local particles
 function love.load()
   
   love.window.setMode(512 * 2, 256 * 2)
-  love.window.setTitle("Valentine runner")
+  love.window.setTitle("Valentine Runner")
   screenWidth = love.graphics.getWidth() / 2
   screenHeight = love.graphics.getHeight() / 2
   -- Utils
   parallaxManager = ParallaxManager()
   spriteManager = SpriteManager()
   particles = Particles()
+    -- Panda
+  panda = spriteManager.get("pandaSprite.lua")
+  groundPosition = screenHeight-30
   -- Parallaxes
   parallaxManager.addParallax("paralax_sky.png", 0)
   parallaxManager.addParallax("paralax_sea-clouds.png", 0.01)
@@ -34,9 +36,6 @@ function love.load()
   parallaxManager.addParallax("paralax_trees.png", 0.8)
   parallaxManager.addParallax("paralax_behind-grass.png", 1)
   parallaxManager.addParallax("paralax_grass.png", 1.2)
-  -- Panda
-  panda = spriteManager.get("pandaSprite.lua")
-  groundPosition = screenHeight-30
   -- Particules
   particles.load()
 
