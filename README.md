@@ -1,6 +1,7 @@
 # love-ValentineRunner
-A small runner about our Valentine travel in Vienam
+A small parallax memory about our Valentine travel in Vienam
 
 Features : 
-- paralaxes
+- parallaxes
 - sprite manager and animator
+- simple particle emiter
