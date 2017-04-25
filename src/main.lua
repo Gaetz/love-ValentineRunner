@@ -60,7 +60,7 @@ function love.draw()
   parallaxManager.draw()
     
   -- Draw the particle system behind the panda
-  particles.draw(screenWidth / 4 + 18, groundPosition + 12)
+  particles.draw(screenWidth / 4 + 30, groundPosition + 12)
   -- Draw the panda above particles
   spriteManager.draw(panda, screenWidth / 4, groundPosition)
 

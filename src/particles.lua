@@ -7,7 +7,7 @@ function Particles()
     img = love.graphics.newImage('images/heart.png')
     psystem = love.graphics.newParticleSystem(img, 50)
     psystem:setParticleLifetime(2, 3) -- Particles live in seconds
-    psystem:setLinearAcceleration(-10, -4, -100, 4) -- Randomized movement towards the left of the screen.
+    psystem:setLinearAcceleration(-10, -50, -100, 0) -- Randomized movement towards the left of the screen.
     psystem:setColors(255, 255, 255, 255, 255, 255, 255, 0) -- Fade to black.
   end
   
